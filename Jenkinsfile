@@ -5,8 +5,6 @@ pipeline {
     agent any
 
     environment {
-        MAVEN_HOME = tool 'maven-3.8.1'  // Configure this in Jenkins
-        PATH = "${MAVEN_HOME}/bin:${PATH}"
         PROJECT_NAME = 'second-largest-finder'
         BUILD_ARTIFACTS = 'target'
     }
