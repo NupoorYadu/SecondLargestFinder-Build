@@ -55,6 +55,13 @@ pipeline {
             }
         }
 
+        stage('Demo - Run Application') {
+            steps {
+                echo '========== Running application to demonstrate output =========='
+                bat 'java -jar target/second-largest-finder-1.0.0.jar'
+            }
+        }
+
         stage('Archive Artifacts') {
             steps {
                 echo '========== Archiving build artifacts =========='
