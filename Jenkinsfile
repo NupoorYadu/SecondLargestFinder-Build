@@ -30,28 +30,28 @@ pipeline {
             steps {
                 echo '========== Checking out source code =========='
                 checkout scm
-                sh 'git log --oneline -5'
+                bat 'git log --oneline -5'
             }
         }
 
         stage('Build') {
             steps {
                 echo '========== Building Maven project =========='
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Test') {
             steps {
                 echo '========== Running unit tests =========='
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
         stage('Package') {
             steps {
                 echo '========== Packaging JAR artifact =========='
-                sh 'mvn package -DskipTests'
+                bat 'mvn package -DskipTests'
             }
         }
 
