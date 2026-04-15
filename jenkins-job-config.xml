@@ -1,0 +1,83 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<!-- 
+  Jenkins Job Configuration for SecondLargestFinder Pipeline
+  This is a Declarative Pipeline job configuration in XML format
+  Can be imported via Jenkins UI or Jenkins CLI
+-->
+<org.jenkinsci.plugins.workflow.job.WorkflowJob plugin="workflow-job@1231.v3236ee2500a">
+  <actions/>
+  <description>Maven Build Pipeline for Second Largest Finder Algorithm Implementation
+    
+This job:
+- Checks out code from Git repository
+- Compiles Maven project
+- Runs unit tests
+- Packages JAR artifact
+- Archives build outputs
+  </description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <!-- Keep last 10 builds -->
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeepStr>-1</daysToKeepStr>
+        <numToKeepStr>10</numToKeepStr>
+        <artifactDaysToKeepStr>-1</artifactDaysToKeepStr>
+        <artifactNumToKeepStr>-1</artifactNumToKeepStr>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    
+    <!-- GitHub Project -->
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.35.0">
+      <projectUrl>https://github.com/your-org/second-largest-finder/</projectUrl>
+      <displayName></DisplayName>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+  </properties>
+  
+  <!-- Trigger configuration -->
+  <triggers>
+    <!-- Poll SCM every 15 minutes -->
+    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.35.0">
+      <spec></spec>
+    </com.cloudbees.jenkins.GitHubPushTrigger>
+    <hudson.triggers.SCMTrigger>
+      <spec>H/15 * * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2656.v95c9b_375eb_33">
+    <!-- SCM: Git Repository -->
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@4.11.1">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+        <hudson.plugins.git.UserRemoteConfig>
+          <url>https://github.com/your-org/second-largest-finder.git</url>
+          <credentialsId>github-credentials</credentialsId>
+        </hudson.plugins.git.UserRemoteConfig>
+      </userRemoteConfigs>
+      <branches>
+        <hudson.plugins.git.BranchSpec>
+          <name>*/main</name>
+        </hudson.plugins.git.BranchSpec>
+      </branches>
+      <browser class="hudson.plugins.git.browser.GithubWeb">
+        <url>https://github.com/your-org/second-largest-finder</url>
+      </browser>
+      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+      <gitTool>Default</gitTool>
+      <submoduleCfg class="list"/>
+      <extensions/>
+    </scm>
+    
+    <!-- Jenkinsfile location -->
+    <scriptPath>Jenkinsfile</scriptPath>
+    <lightweight>true</lightweight>
+  </definition>
+  
+  <!-- Concurrent build configuration -->
+  <concurrentBuild>false</concurrentBuild>
+  
+  <!-- Quiet period: wait 5 seconds before starting build after trigger -->
+  <quietPeriod>5</quietPeriod>
+</org.jenkinsci.plugins.workflow.job.WorkflowJob>
